@@ -7,13 +7,16 @@ using Microsoft.Xna.Framework.Input;
 using Core;
 
 public class Game1 : Game {
-    GraphicsDeviceManager graphics;
-    SpriteBatch spriteBatch;
+
+    public GraphicsDeviceManager Graphics { get; }
+    public static Game1 Inst { get; private set; }
 
     private Scene m_Scene;
 
     public Game1(Scene scene) {
-        graphics = new GraphicsDeviceManager(this);
+        Inst = this;
+
+        Graphics = new GraphicsDeviceManager(this);
 
         Content.RootDirectory = "Content";
 
@@ -31,10 +34,6 @@ public class Game1 : Game {
             m_Scene.Cleanup();
             m_Scene = m_Scene.ParentScene;
         }
-    }
-
-    protected override void LoadContent() {
-        spriteBatch = new SpriteBatch(GraphicsDevice);
     }
 
     protected override void Draw(GameTime gameTime) {

@@ -41,6 +41,6 @@ copy_libs:
 	mkdir -p bin
 	cp -nr $(MONOGAME)/* bin
 
-run:
+run: compile
 	cd bin; \
 	mono Program.exe
