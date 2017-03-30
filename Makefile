@@ -1,42 +1,42 @@
+# NOTE: This Makefile requires Mono and MonoGame. And does not support shitty
+#       operating systems (e.g. Windows).
+
 #---------------------------------------
 # CONSTANTS
 #---------------------------------------
 
-BINDIR=bin
-COMPILER=mcs
-FLAGS=-target:winexe
-LIBPATHS=-lib:$(MONOGAME)
-LIBS=MonoGame.Framework.dll
-OBJDIR=obj
-SRCDIR=src
-TARGET=Program.exe
-
-CONTENT:=$(wildcard Content/*)
-CONTENTFILE=content.mgcb
+BINDIR      = bin
+COMPILER    = mcs
+CONTENTFILE = content.mgcb
+FLAGS       = -target:winexe
+LIBPATHS    = -lib:$(MONOGAME)
+LIBS        = MonoGame.Framework.dll
+OBJDIR      = obj
+SRCDIR      = src
+TARGET      = Program.exe
 
 #---------------------------------------
 # INITIALIZATION
 #---------------------------------------
 
+# Find all content to build with MonoGame Content Builder.
+CONTENT := $(wildcard Content/*)
+
 # Linux and macOS have different paths to the MonoGame library files, so make
 # sure to set them up properly. No Windows support here, lol!
+OS := $(shell uname)
 
-OS:=$(shell uname)
-
-ifeq ($(OS),Linux)
-MONOGAME=/usr/lib/mono/xbuild/MonoGame/v3.0/Assemblies/DesktopGL
+ifeq ($(OS), Linux)
+MONOGAME = /usr/lib/mono/xbuild/MonoGame/v3.0/Assemblies/DesktopGL
 endif
 
-ifeq ($(OS),Darwin)
-MONOGAME=/Library/Frameworks/MonoGame.framework/Current/Assemblies/DesktopGL
+ifeq ($(OS), Darwin)
+MONOGAME = /Library/Frameworks/MonoGame.framework/Current/Assemblies/DesktopGL
 endif
 
 #---------------------------------------
 # TARGETS
 #---------------------------------------
-
-# Always recompile. Makes it easier to work on the project.
-.PHONY: $(BINDIR)/$(TARGET)
 
 # Don't check for existing files when making the following targets.
 .PHONY: all clean libs run
@@ -47,14 +47,6 @@ all: $(BINDIR)/$(TARGET) content libs
 clean:
 	rm -rf $(CONTENTFILE) $(BINDIR) $(OBJDIR)
 
-$(BINDIR)/$(TARGET):
-	mkdir -p $(BINDIR)
-	$(COMPILER) $(FLAGS)		     \
-	            $(LIBPATHS)		     \
-	            $(addprefix -r:,$(LIBS)) \
-	            -out:$(BINDIR)/$(TARGET) \
-	            -recurse:$(SRCDIR)/*.cs
-
 libs:
 	mkdir -p $(BINDIR)
 	cp -nr $(MONOGAME)/* $(BINDIR)
@@ -64,11 +56,26 @@ run: all
 	mono $(TARGET)
 
 #-------------------
+# MONO
+#-------------------
+
+# Always recompile. Makes it easier to work on the project.
+.PHONY: $(BINDIR)/$(TARGET)
+
+$(BINDIR)/$(TARGET):
+	mkdir -p $(BINDIR)
+	$(COMPILER) $(FLAGS)		      \
+	            $(LIBPATHS)		      \
+	            $(addprefix -r:, $(LIBS)) \
+	            -out:$(BINDIR)/$(TARGET)  \
+	            -recurse:$(SRCDIR)/*.cs
+
+#-------------------
 # MONOGAME
 #-------------------
 
 # Kind of a hack to build content easily.
-.PHONY: Content/*
+.PHONY: Content/* pre-content content
 
 Content/*.fbx:
 	@echo /build:$@ >> $(CONTENTFILE)
@@ -85,4 +92,4 @@ pre-content:
 content: pre-content $(CONTENT)
 	mkdir -p $(BINDIR)
 	mgcb -@:$(CONTENTFILE)
-	rm $(CONTENTFILE)
+	rm -f $(CONTENTFILE)
