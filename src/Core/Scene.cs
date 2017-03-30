@@ -26,10 +26,12 @@ public abstract class Scene {
 
     public void AddEntity(int id, Entity e){
         entities.Add(id, e);
+        e.Scene = this;
     }
 
     public void RemoveEntity(Entity e){
         entities.Remove(e);
+        e.Scene = null;
     }
 }
 
