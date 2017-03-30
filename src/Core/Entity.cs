@@ -20,7 +20,9 @@ public sealed class Entity {
 
     /// <summary>Gets the entity ID.</summary>
     public int ID { get; }
-    public Scene Scene { get; set; };
+
+    /// <summary>Gets or sets the scene that the entity is in.</summary>
+    public Scene Scene { get; set; }
 
     /*--------------------------------------
      * PRIVATE FIELDS
