@@ -45,7 +45,7 @@ endif
 all: $(BINDIR)/$(TARGET) content libs
 
 clean:
-	rm -rf $(BINDIR)
+	rm -rf $(CONTENTFILE) $(BINDIR) $(OBJDIR)
 
 $(BINDIR)/$(TARGET):
 	mkdir -p $(BINDIR)
