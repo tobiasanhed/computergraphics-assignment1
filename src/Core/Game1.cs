@@ -21,10 +21,7 @@ public class Game1 : Game {
     }
 
     public void EnterScene(Scene scene) {
-        if (m_Scene != null) {
-            LeaveScene();
-        }
-
+        scene.ParentScene = m_Scene;
         m_Scene = scene;
         m_Scene.Init();
     }
@@ -32,9 +29,8 @@ public class Game1 : Game {
     public void LeaveScene() {
         if (m_Scene != null) {
             m_Scene.Cleanup();
+            m_Scene = m_Scene.ParentScene;
         }
-
-        m_Scene = m_Scene.ParentScene;
     }
 
     protected override void LoadContent() {
