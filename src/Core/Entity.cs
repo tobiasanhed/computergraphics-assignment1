@@ -45,6 +45,10 @@ public sealed class Entity {
         m_Components.Add(typeof (T), component);
     }
 
+    public void Destroy() {
+        throw new System.NotImplementedException();
+    }
+
     public T GetComponent<T>() where T : Component {
         return (T)m_Components[typeof (T)];
     }
