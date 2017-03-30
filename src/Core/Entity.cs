@@ -54,7 +54,9 @@ public sealed class Entity {
 
     /// <summary>Destroys the entity by removing it from the scene.</summary>
     public void Destroy() {
-        Scene.RemoveEntity(this);
+        if (Scene != null) {
+            Scene.RemoveEntity(this);
+        }
     }
 
     /// <summary>Gets the entity component of the specified type.</summary>
