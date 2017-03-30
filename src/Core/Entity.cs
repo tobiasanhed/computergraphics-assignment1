@@ -20,6 +20,7 @@ public sealed class Entity {
 
     /// <summary>Gets the entity ID.</summary>
     public int ID { get; }
+    public Scene Scene { get; set; };
 
     /*--------------------------------------
      * PRIVATE FIELDS
@@ -51,7 +52,7 @@ public sealed class Entity {
 
     /// <summary>Destroys the entity by removing it from the scene.</summary>
     public void Destroy() {
-        throw new System.NotImplementedException();
+        Scene.RemoveEntity(this);
     }
 
     /// <summary>Gets the entity component of the specified type.</summary>

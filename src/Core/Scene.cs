@@ -18,14 +18,18 @@ public abstract class Scene {
 
     public virtual void Init(){ }
     
-    public virtual CleanUp() { }
+    public virtual void CleanUp() { }
 
     public void AddSubsystem(Subsystem s){
         subsystems.Add(s);
     }
 
-    public void AddEntities(int id, Entity e){
+    public void AddEntity(int id, Entity e){
         entities.Add(id, e);
+    }
+
+    public void RemoveEntity(Entity e){
+        entities.Remove(e);
     }
 }
 
