@@ -1,7 +1,25 @@
-LIBS=-r:MonoGame.Framework.dll
-TARGET=-target:winexe -out:bin/Program.exe
+#---------------------------------------
+# CONSTANTS
+#---------------------------------------
 
-#CONTENT:=$(wildcard Content/*.*)
+BINDIR=bin
+COMPILER=mcs
+FLAGS=-target:winexe
+LIBPATHS=-lib:$(MONOGAME)
+LIBS=MonoGame.Framework.dll
+OBJDIR=obj
+SRCDIR=src
+TARGET=Program.exe
+
+CONTENT:=$(wildcard Content/*)
+CONTENTFILE=content.mgcb
+
+#---------------------------------------
+# INITIALIZATION
+#---------------------------------------
+
+# Linux and macOS have different paths to the MonoGame library files, so make
+# sure to set them up properly. No Windows support here, lol!
 
 OS:=$(shell uname)
 
@@ -13,34 +31,58 @@ ifeq ($(OS),Darwin)
 MONOGAME=/Library/Frameworks/MonoGame.framework/Current/Assemblies/DesktopGL
 endif
 
-LIBPATHS=-lib:$(MONOGAME)
+#---------------------------------------
+# TARGETS
+#---------------------------------------
 
-all: compile
+# Always recompile. Makes it easier to work on the project.
+.PHONY: $(BINDIR)/$(TARGET)
 
-#.PHONY: clean
+# Don't check for existing files when making the following targets.
+.PHONY: all clean libs run
+
+# Default target.
+all: $(BINDIR)/$(TARGET) content libs
+
 clean:
-	rm -rf bin
+	rm -rf $(BINDIR)
 
-compile: copy_libs
-	mkdir -p bin
-	mcs $(LIBPATHS) $(LIBS) $(TARGET) -recurse:src/*.cs
+$(BINDIR)/$(TARGET):
+	mkdir -p $(BINDIR)
+	$(COMPILER) $(FLAGS)		     \
+	            $(LIBPATHS)		     \
+	            $(addprefix -r:,$(LIBS)) \
+	            -out:$(BINDIR)/$(TARGET) \
+	            -recurse:$(SRCDIR)/*.cs
 
-#content: Content/US_Canyon.png
-#	echo $(CONTENT)
-#	echo /compress               > Content.mgcb
-#	echo /intermediateDir:obj   >> Content.mgcb
-#	echo /outputDir:bin/Content >> Content.mgcb
-#	echo /quiet                 >> Content.mgcb
-#
-#	for fn in Content/*; do \
-#		make $$fn;      \
-#	done
-#	rm Content.mgcb
+libs:
+	mkdir -p $(BINDIR)
+	cp -nr $(MONOGAME)/* $(BINDIR)
 
-copy_libs:
-	mkdir -p bin
-	cp -nr $(MONOGAME)/* bin
+run: all
+	cd $(BINDIR); \
+	mono $(TARGET)
 
-run: compile
-	cd bin; \
-	mono Program.exe
+#-------------------
+# MONOGAME
+#-------------------
+
+# Kind of a hack to build content easily.
+.PHONY: Content/*
+
+Content/*.fbx:
+	@echo /build:$@ >> $(CONTENTFILE)
+
+Content/*.png:
+	@echo /build:$@ >> $(CONTENTFILE)
+
+pre-content:
+	@echo /compress                   > $(CONTENTFILE)
+	@echo /intermediateDir:$(OBJDIR) >> $(CONTENTFILE)
+	@echo /outputDir:$(BINDIR)       >> $(CONTENTFILE)
+	@echo /quiet                     >> $(CONTENTFILE)
+
+content: pre-content $(CONTENT)
+	mkdir -p $(BINDIR)
+	mgcb -@:$(CONTENTFILE)
+	rm $(CONTENTFILE)
