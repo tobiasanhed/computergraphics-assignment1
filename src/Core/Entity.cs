@@ -51,7 +51,7 @@ public sealed class Entity {
      *------------------------------------*/
 
     /// <summary>Adds the specified component to the entity.</summary>
-    /// <param name="component">The component to add to the entity.</param
+    /// <param name="component">The component to add to the entity.</param>
     public void AddComponent<T>(T component) where T : Component {
         m_Components.Add(typeof (T), component);
     }

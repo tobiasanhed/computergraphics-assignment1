@@ -43,6 +43,7 @@ public abstract class Scene {
     /// <param name="entity">The entity to add to the scene.</param>
     public void AddEntity(Entity entity) {
         m_Entities.Add(entity);
+        entity.Scene = this;
     }
 
     /// <summary>Adds the specified subsystem to the scene.</summary>
@@ -72,6 +73,7 @@ public abstract class Scene {
     /// <param name="entity">The entity to remove from the scene.</param>
     public void RemoveEntity(Entity entity) {
         m_Entities.Remove(entity);
+        entity.Scene = null;
     }
 
     /// <summary>Performs scene-specific update logic.</summary>
