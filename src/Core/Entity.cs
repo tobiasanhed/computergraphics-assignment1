@@ -56,6 +56,12 @@ public sealed class Entity {
         m_Components.Add(typeof (T), component);
     }
 
+    public void AddComponents(params Component[] components) {
+        foreach (var component in components) {
+            m_Components.Add(component.GetType(), component);
+        }
+    }
+
     /// <summary>Destroys the entity by removing it from the scene.</summary>
     public void Destroy() {
         if (Scene != null) {

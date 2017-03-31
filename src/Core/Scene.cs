@@ -51,6 +51,13 @@ public abstract class Scene {
     /// <param name="subsystem">The subsystem to add to the scene.</param>
     public void AddSubsystem(Subsystem subsystem) {
         m_Subsystems.Add(subsystem);
+        subsystem.Scene = this;
+    }
+
+    public void AddSubsystems(params Subsystem[] subsystems) {
+        foreach (var subsystem in subsystems) {
+            AddSubsystem(subsystem);
+        }
     }
 
     /// <summary>Performs cleanup logic.</summary>
@@ -67,6 +74,18 @@ public abstract class Scene {
         foreach (var subsystem in m_Subsystems) {
             subsystem.Draw(t, dt);
         }
+    }
+
+    public IEnumerable<Entity> GetEntities<T>() where T : Component {
+        var entities = new List<Entity>();
+
+        foreach (var entity in m_Entities) {
+            if (entity.HasComponent<T>()) {
+                entities.Add(entity);
+            }
+        }
+
+        return entities;
     }
 
     /// <summary>Performs initialization logic.</summary>

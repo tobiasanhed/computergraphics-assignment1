@@ -17,6 +17,13 @@ using Microsoft.Xna.Framework;
 /// <summary>Represents the base class for a single subsytem.</summary>
 public abstract class Subsystem {
     /*--------------------------------------
+     * PUBLIC PROPERTIES
+     *------------------------------------*/
+
+    /// <summary>Gets or sets the scene that the subsystem is used in.</summary>
+    public Scene Scene { get; set; }
+
+    /*--------------------------------------
      * PUBLIC METHODS
      *------------------------------------*/
 
