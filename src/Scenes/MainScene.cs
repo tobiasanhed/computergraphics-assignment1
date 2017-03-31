@@ -27,10 +27,10 @@ public class MainScene : Scene {
         var chopper = new Entity();
 
         chopper.AddComponents(
-            new ModelComponent {
+            new CModel {
                 Model = Game1.Inst.Content.Load<Model>("Models/Chopper")
             },
-            new LogicComponent {
+            new CLogic {
                 UpdateFunc = (t, dt) => {
                     System.Console.WriteLine("LOL", t);
                 }

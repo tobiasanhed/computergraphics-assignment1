@@ -17,10 +17,10 @@ using Components;
 /// <summary>Represents a renderingsubsystem.</summary>
 public  class LogicSubsystem : Subsystem {
     public override void Update(float t, float dt) {
-        var entities = Scene.GetEntities<LogicComponent>();
+        var entities = Scene.GetEntities<CLogic>();
 
         foreach (var entity in entities) {
-            var logic = entity.GetComponent<LogicComponent>();
+            var logic = entity.GetComponent<CLogic>();
 
             var timer = logic.UpdateTimer + dt;
 

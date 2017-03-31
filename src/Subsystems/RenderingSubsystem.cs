@@ -23,10 +23,10 @@ public class RenderingSubsystem : Subsystem {
 
         Game1.Inst.GraphicsDevice.Clear(Color.CornflowerBlue);
 
-        var entities = Scene.GetEntities<ModelComponent>();
+        var entities = Scene.GetEntities<CModel>();
 
         foreach (var entity in entities) {
-            var model = entity.GetComponent<ModelComponent>();
+            var model = entity.GetComponent<CModel>();
 
             Matrix[] transforms = new Matrix[model.Model.Bones.Count];
             model.Model.CopyAbsoluteBoneTransformsTo(transforms);
