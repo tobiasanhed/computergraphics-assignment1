@@ -26,9 +26,11 @@ public class MainScene : Scene {
 
         var chopper = new Entity();
 
+        var model = Game1.Inst.Content.Load<Model>("Models/Chopper");
+
         chopper.AddComponents(
             new CModel {
-                Model = Game1.Inst.Content.Load<Model>("Models/Chopper")
+                Model = model
             },
             new CLogic {
                 UpdateFunc = (t, dt) => {

@@ -4,8 +4,8 @@ namespace CG_A1.Components {
  * USINSG
  *------------------------------------*/
 
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 using Core;
 
@@ -23,7 +23,7 @@ public class CModel : Component {
     public Model Model { get; set; }
 
     /// <summary>Gets or sets the model transform.</summary>
-    public Matrix Transform { get; set; }
+    public Matrix Transform { get; set; } = Matrix.Identity;
 }
 
 }

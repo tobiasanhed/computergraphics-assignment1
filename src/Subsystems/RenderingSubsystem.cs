@@ -34,7 +34,7 @@ public class RenderingSubsystem : Subsystem {
             foreach(var mesh in model.Model.Meshes){
                 foreach(BasicEffect effect in mesh.Effects){
                     effect.EnableDefaultLighting();
-                    effect.World = transforms[mesh.ParentBone.Index];
+                    effect.World = transforms[mesh.ParentBone.Index] * model.Transform;
                     effect.View = Camera.ViewMatrix();
                     effect.Projection = Camera.Projection;
                 }
