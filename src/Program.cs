@@ -6,6 +6,7 @@ namespace CG_A1 {
 
 using System;
 
+using Core;
 using Scenes;
 
 /*--------------------------------------
@@ -13,7 +14,6 @@ using Scenes;
  *------------------------------------*/
 
 public static class Program {
-
     /*--------------------------------------
      * PRIVATE METHODS
      *------------------------------------*/

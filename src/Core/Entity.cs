@@ -28,10 +28,13 @@ public sealed class Entity {
      * PRIVATE FIELDS
      *------------------------------------*/
 
+    /// <summary>The look-up table for components attached to the
+    ///          entity.</summary>
     private readonly Dictionary<Type, Component> m_Components =
         new Dictionary<Type, Component>();
 
-    private static int s_ID = 1;
+    /// <summary>Static ID counter for entities.</summary>
+    private static int s_NextID = 1;
 
     /*--------------------------------------
      * CONSTRUCTOR
@@ -39,7 +42,7 @@ public sealed class Entity {
 
     /// <summary>Creates a new <see cref="Entity"/> instance.</summary>
     public Entity() {
-        ID = Interlocked.Increment(ref s_ID);
+        ID = Interlocked.Increment(ref s_NextID);
     }
 
     /*--------------------------------------

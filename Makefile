@@ -1,7 +1,7 @@
 #!/usr/bin/make -f
 
 # NOTE: This Makefile requires Mono and MonoGame. And does not support shitty
-#       operating systems (e.g. Windows).
+#       operating systems (e.g. Windows). :-)
 
 #---------------------------------------
 # CONSTANTS

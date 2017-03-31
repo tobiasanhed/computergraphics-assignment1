@@ -1,8 +1,10 @@
-namespace CG_A1 {
+namespace CG_A1.Core {
 
 /*--------------------------------------
  * USINGS
  *------------------------------------*/
+
+using System;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -14,11 +16,15 @@ using Core;
  * CLASSES
  *------------------------------------*/
 
+/// <summary>Represents a game instance. This class is a singleton
+///          type.</summary>
 public class Game1 : Game {
     /*--------------------------------------
      * PUBLIC PROPERTIES
      *------------------------------------*/
 
+    /// <summary>Gets the <see cref="GraphicsDeviceManager"/> associated with
+    ///          the game instance.</summary>
     public GraphicsDeviceManager Graphics { get; }
 
     /// <summary>Gets the <see cref="Game1"/> singleton instance.</summary>
@@ -28,15 +34,23 @@ public class Game1 : Game {
      * PRIVATE FIELDS
      *------------------------------------*/
 
+    /// <summary>The scene that the game is currently displaying.</summary>
     private Scene m_Scene;
 
     /*--------------------------------------
      * CONSTRUCTORS
      *------------------------------------*/
 
+    /// <summary>Initializes a new instance of the <see cref="Game1"/>
+    //           class.</summary>
     public Game1() {
-        Inst = this;
+        // Technically, we have a race condition here, but that's ok. ;-)
+        if (Inst != null) {
+            var s = $"Only a single {nameof (Game1)} instance is allowed.";
+            throw new System.InvalidOperationException(s);
+        }
 
+        Inst     = this;
         Graphics = new GraphicsDeviceManager(this);
     }
 
@@ -44,12 +58,15 @@ public class Game1 : Game {
      * PUBLIC METHODS
      *------------------------------------*/
 
+    /// <summary>Enters the specified scene.</summary>
+    /// <param name="scene">The scene to enter.<param>
     public void EnterScene(Scene scene) {
         scene.ParentScene = m_Scene;
         m_Scene = scene;
         m_Scene.Init();
     }
 
+    /// <summary>Leaves the current scene.</summary>
     public void LeaveScene() {
         if (m_Scene != null) {
             m_Scene.Cleanup();
@@ -57,6 +74,8 @@ public class Game1 : Game {
         }
     }
 
+    /// <summary>Runs the game using the specified scene.</summary>
+    /// <param name="scene">The scene to display.<param>
     public void Run(Scene scene) {
         EnterScene(scene);
 
@@ -69,8 +88,8 @@ public class Game1 : Game {
 
     protected override void Draw(GameTime gameTime) {
         if (m_Scene != null) {
-            float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
-            float t  = (float)gameTime.TotalGameTime.TotalSeconds;
+            var t  = (float)gameTime.TotalGameTime  .TotalSeconds;
+            var dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
             m_Scene.Draw(t, dt);
         }
 
@@ -81,13 +100,14 @@ public class Game1 : Game {
         base.Initialize();
 
         Content.RootDirectory = "Content";
-        Window.Title = "Computer Graphics - Assignment 1";
+        IsMouseVisible        = true;
+        Window.Title          = "Computer Graphics - Assignment 1";
     }
 
     protected override void Update(GameTime gameTime) {
         if (m_Scene != null) {
-            float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
-            float t  = (float)gameTime.TotalGameTime.TotalSeconds;
+            var t  = (float)gameTime.TotalGameTime  .TotalSeconds;
+            var dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
             m_Scene.Update(t, dt);
         }
 
