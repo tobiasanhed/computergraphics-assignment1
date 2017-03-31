@@ -15,7 +15,7 @@ using Components;
  *------------------------------------*/
 
 /// <summary>Represents a renderingsubsystem.</summary>
-public  class LogicSubsystem: Subsystem {
+public class LogicSubsystem: Subsystem {
     public override void Update(float t, float dt) {
         var entities = Scene.GetEntities<CLogic>();
 
