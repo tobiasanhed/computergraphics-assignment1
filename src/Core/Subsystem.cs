@@ -31,6 +31,10 @@ public abstract class Subsystem {
     /// <param name="dt">The elapsed time since last call, in seconds.</param>
     public virtual void Update(float t, float dt) {
     }
+
+    public virtual void Init(){ }
+
+    public virtual void Cleanup(){ }
 }
 
 }

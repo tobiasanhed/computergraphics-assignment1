@@ -5,6 +5,7 @@ namespace CG_A1.Scenes {
  *------------------------------------*/
 
 using Microsoft.Xna.Framework;
+using Subsystems;
 
 using Core;
 
@@ -17,11 +18,15 @@ public class MainScene : Scene {
      * PUBLIC METHODS
      *------------------------------------*/
 
-    public override void Draw(float t, float dt) {
-        // TODO: Draw logic should not be done here.
-        Game1.Inst.GraphicsDevice.Clear(Color.CornflowerBlue);
+	public override void Init(){    	
+    	AddSubsystem(new RenderingSubsystem());
 
-        base.Draw(t, dt);
+    	base.Init();
+    }
+
+	public override void Cleanup(){
+        
+        base.Cleanup();
     }
 }
 

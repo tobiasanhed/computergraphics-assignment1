@@ -7,6 +7,7 @@ namespace CG_A1.Core {
 using System.Threading;
 using System.Collections.Generic;
 
+using Subsystems;
 using Core;
 
 /*--------------------------------------
@@ -54,6 +55,9 @@ public abstract class Scene {
 
     /// <summary>Performs cleanup logic.</summary>
     public virtual void Cleanup() {
+        foreach(var subsystem in m_Subsystems){
+            subsystem.Cleanup();
+        }
     }
 
     /// <summary>Performs scene-specific draw logic.</summary>
@@ -67,6 +71,9 @@ public abstract class Scene {
 
     /// <summary>Performs initialization logic.</summary>
     public virtual void Init() {
+        foreach(var subsystem in m_Subsystems){
+            subsystem.Init();
+        }
     }
 
     /// <summary>Removes the specified entity from the scene.</summary>
