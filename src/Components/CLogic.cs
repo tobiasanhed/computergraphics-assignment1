@@ -13,7 +13,7 @@ using Core;
  *------------------------------------*/
 
 /// <summary>Provides a way to attach extra logic to entities.</summary>
-public class CLogic : Component {
+public class CLogic: Component {
     /*--------------------------------------
      * PUBLIC PROPERTIES
      *------------------------------------*/

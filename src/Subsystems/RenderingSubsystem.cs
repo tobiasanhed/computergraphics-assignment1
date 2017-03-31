@@ -15,7 +15,7 @@ using Core;
  *------------------------------------*/
 
 /// <summary>Represents a renderingsubsystem.</summary>
-public class RenderingSubsystem : Subsystem {
+public class RenderingSubsystem: Subsystem {
     public Camera Camera { get; set; }
 
     public override void Draw(float t, float dt) {

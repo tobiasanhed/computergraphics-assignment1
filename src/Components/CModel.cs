@@ -14,7 +14,7 @@ using Core;
  *------------------------------------*/
 
 /// <summary>Contains state information about a model.</summary>
-public class CModel : Component {
+public class CModel: Component {
     /*--------------------------------------
      * PUBLIC PROPERTIES
      *------------------------------------*/

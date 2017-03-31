@@ -76,7 +76,11 @@ public abstract class Scene {
         }
     }
 
-    public IEnumerable<Entity> GetEntities<T>() where T : Component {
+    /// <summary>Retrives a list of all entities containing the specified type
+    ///          of component.</summary>
+    public IEnumerable<Entity> GetEntities<T>() where T: Component {
+        // TODO: This method is super slow, but who cares?
+
         var entities = new List<Entity>();
 
         foreach (var entity in m_Entities) {

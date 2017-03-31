@@ -18,7 +18,7 @@ using Core;
 
 /// <summary>Represents a game instance. This class is a singleton
 ///          type.</summary>
-public class Game1 : Game {
+public class Game1: Game {
     /*--------------------------------------
      * PRIVATE FIELDS
      *------------------------------------*/
@@ -132,7 +132,7 @@ public class Game1 : Game {
         }
 
         base.Update(gameTime);
-        
+
         if(Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
     }

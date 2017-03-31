@@ -15,7 +15,7 @@ using Subsystems;
  * CLASSES
  *------------------------------------*/
 
-public class MainScene : Scene {
+public class MainScene: Scene {
     /*--------------------------------------
      * PUBLIC METHODS
      *------------------------------------*/
