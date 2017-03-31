@@ -7,10 +7,13 @@ namespace CG_A1.Core {
 using Microsoft.Xna.Framework;
 
 /// <summary>Represents a camera</summary>
-public abstract class Camera {
-    public Matrix Projection { get; set; }
+public class LookAtCamera : Camera {
+    public Vector3 Target { get; set; }
 
-    public Matrix View { get; set; }
+    public override Matrix ViewMatrix(){
+        return Matrix.CreateLookAt(Position, Target, Up); 
+    }
+
 }
 
 }

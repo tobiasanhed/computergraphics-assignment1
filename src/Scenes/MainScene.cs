@@ -20,7 +20,7 @@ public class MainScene : Scene {
 
 	public override void Init(){    	
     	AddSubsystem(new RenderingSubsystem());
-
+    	
     	base.Init();
     }
 
