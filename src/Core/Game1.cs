@@ -132,7 +132,7 @@ public class Game1 : Game {
         }
 
         base.Update(gameTime);
-
+        
         if(Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
     }
