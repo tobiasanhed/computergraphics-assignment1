@@ -56,6 +56,8 @@ public sealed class Entity {
         m_Components.Add(typeof (T), component);
     }
 
+    /// <summary>Adds all specified components to the entity.</summary>
+    /// <param name="components">The components to add to the entity.</param>
     public void AddComponents(params Component[] components) {
         foreach (var component in components) {
             m_Components.Add(component.GetType(), component);
