@@ -15,21 +15,26 @@ using System.Threading;
 /// <summary>Represents a single entity.</summary>
 public sealed class Entity {
     /*--------------------------------------
+     * PRIVATE FIELDS
+     *------------------------------------*/
+
+    /// <summary>The look-up table for components attached to the
+    ///          entity.</summary>
+    private readonly Dictionary<Type, Component> m_Components =
+        new Dictionary<Type, Component>();
+
+    /// <summary>Static ID counter for entities.</summary>
+    private static int s_NextID = 1;
+
+    /*--------------------------------------
      * PUBLIC PROPERTIES
      *------------------------------------*/
 
     /// <summary>Gets the entity ID.</summary>
     public int ID { get; }
-    public Scene Scene { get; set; };
 
-    /*--------------------------------------
-     * PRIVATE FIELDS
-     *------------------------------------*/
-
-    private readonly Dictionary<Type, Component> m_Components =
-        new Dictionary<Type, Component>();
-
-    private static int s_ID = 1;
+    /// <summary>Gets or sets the scene that the entity is in.</summary>
+    public Scene Scene { get; set; }
 
     /*--------------------------------------
      * CONSTRUCTOR
@@ -37,7 +42,8 @@ public sealed class Entity {
 
     /// <summary>Creates a new <see cref="Entity"/> instance.</summary>
     public Entity() {
-        ID = Interlocked.Increment(ref s_ID);
+        // Well, what do you know! No race condition here! :-P
+        ID = Interlocked.Increment(ref s_NextID);
     }
 
     /*--------------------------------------
@@ -52,7 +58,9 @@ public sealed class Entity {
 
     /// <summary>Destroys the entity by removing it from the scene.</summary>
     public void Destroy() {
-        Scene.RemoveEntity(this);
+        if (Scene != null) {
+            Scene.RemoveEntity(this);
+        }
     }
 
     /// <summary>Gets the entity component of the specified type.</summary>
