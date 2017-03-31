@@ -109,6 +109,10 @@ public class Game1 : Game {
         Content.RootDirectory = "Content";
         IsMouseVisible        = true;
         Window.Title          = "Computer Graphics - Assignment 1";
+
+        Graphics.PreferredBackBufferWidth = 1280;
+        Graphics.PreferredBackBufferHeight = 720;
+        Graphics.ApplyChanges();
     }
 
     /// <summary>Performs update logic by telling the current scene to perform

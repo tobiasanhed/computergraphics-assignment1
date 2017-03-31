@@ -8,15 +8,9 @@ using Microsoft.Xna.Framework;
 
 /// <summary>Represents a model</summary>
 public abstract class ModelComponent {
-	public Model Model { get; set; }
+    public Model Model { get; set; }
 
-	public Matrix Transform { get; set; }
-
-	public object VertexBuffer { get; set; }
-
-	public object IndexBuffer { get; set; }
-
-
+    public Matrix Transform { get; set; }
 }
 
 }
