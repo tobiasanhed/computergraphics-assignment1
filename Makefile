@@ -15,7 +15,7 @@ SRCDIR     = src
 
 # Mono C# Compiler
 COMPILER = mcs
-FLAGS    = -target:winexe
+FLAGS    = -debug+ -define:DEBUG -target:winexe
 LIBPATHS = $(MONOGAME_PATH)
 LIBS     = MonoGame.Framework.dll
 TARGET   = Program.exe
