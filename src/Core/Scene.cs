@@ -16,46 +16,67 @@ using Core;
 /// <summary>Represents a single scene.</summary>
 public abstract class Scene {
     /*--------------------------------------
-     * PUBLIC PROPERTIES
-     *------------------------------------*/
-
-    public Scene ParentScene { get; set; }
-
-    /*--------------------------------------
      * PRIVATE FIELDS
      *------------------------------------*/
 
-    private List<Entity>    m_Entities   = new List<Entity>();
+    // Optimally, the m_Entities field should be a look-up table. It's ok to use
+    // a list for this assignment since we don't expect a large number of
+    // entities.
+    /// <summary>The entities that are currently in the scene.</summary>
+    private List<Entity> m_Entities = new List<Entity>();
+
+    /// <summary>The subsystems currently used in the scene.</summary>
     private List<Subsystem> m_Subsystems = new List<Subsystem>();
+
+    /*--------------------------------------
+     * PUBLIC PROPERTIES
+     *------------------------------------*/
+
+    /// <summary>Gets or sets the parent scene.</summary>
+    public Scene ParentScene { get; set; }
 
     /*--------------------------------------
      * PUBLIC METHODS
      *------------------------------------*/
 
-    public void AddEntity(Entity e){
-        m_Entities.Add(e);
+    /// <summary>Adds the specified entity to the scene.</summary>
+    /// <param name="entity">The entity to add to the scene.</param>
+    public void AddEntity(Entity entity) {
+        m_Entities.Add(entity);
     }
 
-    public void AddSubsystem(Subsystem s){
-        m_Subsystems.Add(s);
+    /// <summary>Adds the specified subsystem to the scene.</summary>
+    /// <param name="subsystem">The subsystem to add to the scene.</param>
+    public void AddSubsystem(Subsystem subsystem) {
+        m_Subsystems.Add(subsystem);
     }
 
+    /// <summary>Performs cleanup logic.</summary>
     public virtual void Cleanup() {
     }
 
+    /// <summary>Performs scene-specific draw logic.</summary>
+    /// <param name="t">The total game time, in seconds.</param>
+    /// <param name="dt">The elapsed time since last call, in seconds.</param>
     public virtual void Draw(float t, float dt) {
         foreach (var subsystem in m_Subsystems) {
             subsystem.Draw(t, dt);
         }
     }
 
+    /// <summary>Performs initialization logic.</summary>
     public virtual void Init() {
     }
 
-    public void RemoveEntity(Entity e){
-        m_Entities.Remove(e);
+    /// <summary>Removes the specified entity from the scene.</summary>
+    /// <param name="entity">The entity to remove from the scene.</param>
+    public void RemoveEntity(Entity entity) {
+        m_Entities.Remove(entity);
     }
 
+    /// <summary>Performs scene-specific update logic.</summary>
+    /// <param name="t">The total game time, in seconds.</param>
+    /// <param name="dt">The elapsed time since last call, in seconds.</param>
     public virtual void Update(float t, float dt) {
         foreach (var subsystem in m_Subsystems) {
             subsystem.Update(t, dt);

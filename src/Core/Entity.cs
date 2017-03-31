@@ -15,16 +15,6 @@ using System.Threading;
 /// <summary>Represents a single entity.</summary>
 public sealed class Entity {
     /*--------------------------------------
-     * PUBLIC PROPERTIES
-     *------------------------------------*/
-
-    /// <summary>Gets the entity ID.</summary>
-    public int ID { get; }
-
-    /// <summary>Gets or sets the scene that the entity is in.</summary>
-    public Scene Scene { get; set; }
-
-    /*--------------------------------------
      * PRIVATE FIELDS
      *------------------------------------*/
 
@@ -35,6 +25,16 @@ public sealed class Entity {
 
     /// <summary>Static ID counter for entities.</summary>
     private static int s_NextID = 1;
+
+    /*--------------------------------------
+     * PUBLIC PROPERTIES
+     *------------------------------------*/
+
+    /// <summary>Gets the entity ID.</summary>
+    public int ID { get; }
+
+    /// <summary>Gets or sets the scene that the entity is in.</summary>
+    public Scene Scene { get; set; }
 
     /*--------------------------------------
      * CONSTRUCTOR

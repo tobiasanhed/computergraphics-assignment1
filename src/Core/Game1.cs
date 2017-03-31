@@ -20,6 +20,13 @@ using Core;
 ///          type.</summary>
 public class Game1 : Game {
     /*--------------------------------------
+     * PRIVATE FIELDS
+     *------------------------------------*/
+
+    /// <summary>The scene that the game is currently displaying.</summary>
+    private Scene m_Scene;
+
+    /*--------------------------------------
      * PUBLIC PROPERTIES
      *------------------------------------*/
 
@@ -29,13 +36,6 @@ public class Game1 : Game {
 
     /// <summary>Gets the <see cref="Game1"/> singleton instance.</summary>
     public static Game1 Inst { get; private set; }
-
-    /*--------------------------------------
-     * PRIVATE FIELDS
-     *------------------------------------*/
-
-    /// <summary>The scene that the game is currently displaying.</summary>
-    private Scene m_Scene;
 
     /*--------------------------------------
      * CONSTRUCTORS
@@ -69,8 +69,9 @@ public class Game1 : Game {
     /// <summary>Leaves the current scene.</summary>
     public void LeaveScene() {
         if (m_Scene != null) {
-            m_Scene.Cleanup();
+            var scene = m_Scene;
             m_Scene = m_Scene.ParentScene;
+            scene.Cleanup();
         }
     }
 
@@ -86,6 +87,9 @@ public class Game1 : Game {
      * PROTECTED METHODS
      *------------------------------------*/
 
+    /// <summary>Performs draw logic by telling the current scene to perform
+    ///          any draw related operations.</summary>
+    /// <param name="gameTime">The game time.</param>
     protected override void Draw(GameTime gameTime) {
         if (m_Scene != null) {
             var t  = (float)gameTime.TotalGameTime  .TotalSeconds;
@@ -96,6 +100,7 @@ public class Game1 : Game {
         base.Draw(gameTime);
     }
 
+    /// <summary>Performs initialization logic.</summary>
     protected override void Initialize() {
         base.Initialize();
 
@@ -104,6 +109,9 @@ public class Game1 : Game {
         Window.Title          = "Computer Graphics - Assignment 1";
     }
 
+    /// <summary>Performs update logic by telling the current scene to perform
+    ///          any update related operations.</summary>
+    /// <param name="gameTime">The game time.</param>
     protected override void Update(GameTime gameTime) {
         if (m_Scene != null) {
             var t  = (float)gameTime.TotalGameTime  .TotalSeconds;

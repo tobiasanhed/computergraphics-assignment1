@@ -20,13 +20,13 @@ public abstract class Subsystem {
      * PUBLIC METHODS
      *------------------------------------*/
 
-    /// <summary>Performs draw logic specified to the subsystem.</summary>
+    /// <summary>Performs draw logic specific to the subsystem.</summary>
     /// <param name="t">The total game time, in seconds.</param>
     /// <param name="dt">The elapsed time since last call, in seconds.</param>
     public virtual void Draw(float t, float dt) {
     }
 
-    /// <summary>Performs update logic specified to the subsystem.</summary>
+    /// <summary>Performs update logic specific to the subsystem.</summary>
     /// <param name="t">The total game time, in seconds.</param>
     /// <param name="dt">The elapsed time since last call, in seconds.</param>
     public virtual void Update(float t, float dt) {
