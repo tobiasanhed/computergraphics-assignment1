@@ -56,7 +56,7 @@ clean:
 
 libs:
 	mkdir -p $(BINDIR)
-	cp -nr $(MONOGAME_PATH)/* $(BINDIR)
+	-cp -nr $(MONOGAME_PATH)/* $(BINDIR)
 
 run: all
 	cd $(BINDIR); \
