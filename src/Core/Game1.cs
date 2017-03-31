@@ -23,6 +23,8 @@ public class Game1 : Game {
      * PRIVATE FIELDS
      *------------------------------------*/
 
+    private Scene m_InitialScene;
+
     /// <summary>The scene that the game is currently displaying.</summary>
     private Scene m_Scene;
 
@@ -78,7 +80,7 @@ public class Game1 : Game {
     /// <summary>Runs the game using the specified scene.</summary>
     /// <param name="scene">The scene to display.<param>
     public void Run(Scene scene) {
-        EnterScene(scene);
+        m_InitialScene = scene;
 
         Run();
     }
@@ -113,6 +115,12 @@ public class Game1 : Game {
     ///          any update related operations.</summary>
     /// <param name="gameTime">The game time.</param>
     protected override void Update(GameTime gameTime) {
+        // TODO: Fix this ugly crap.
+        if (m_InitialScene != null) {
+            EnterScene(m_InitialScene);
+            m_InitialScene = null;
+        }
+
         if (m_Scene != null) {
             var t  = (float)gameTime.TotalGameTime  .TotalSeconds;
             var dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
