@@ -5,9 +5,12 @@ namespace CG_A1.Subsystems {
  *------------------------------------*/
 
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework;
+
 
 using Components.Input;
 using Core;
+using Components;
 
 /*--------------------------------------
  * CLASSES
@@ -23,7 +26,9 @@ public class ControlsSubsystem: Subsystem {
             var controls = entity.GetComponent<CControls>();
 
             if (controls.Controls.ContainsKey("Up") && controls.Controls["Up"] != 0.0) {
-                System.Console.WriteLine("HEJ");
+                var model = entity.GetComponent<CModel>();
+                model.Transform *= Matrix.CreateTranslation(0, 0, -dt*10);
+
             }
         }
     }
