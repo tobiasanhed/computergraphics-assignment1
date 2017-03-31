@@ -42,6 +42,7 @@ public sealed class Entity {
 
     /// <summary>Creates a new <see cref="Entity"/> instance.</summary>
     public Entity() {
+        // Well, what do you know! No race condition here! :-P
         ID = Interlocked.Increment(ref s_NextID);
     }
 
