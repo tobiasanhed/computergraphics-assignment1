@@ -22,16 +22,18 @@ public class MainScene: Scene {
      * PUBLIC METHODS
      *------------------------------------*/
 
-    public override void Init(){
-    	AddSubsystems(new ControlsSubsystem(),
-                      new InputSubsystem(),
-                      new LogicSubsystem(),
+    /// <summary>Performs initialization logic.</summary>
+    public override void Init() {
+    	AddSubsystems(new  ControlsSubsystem(),
+                      new     InputSubsystem(),
+                      new     LogicSubsystem(),
                       new RenderingSubsystem());
 
         var chopper = new Entity();
 
         var model = Game1.Inst.Content.Load<Model>("Models/Chopper");
 
+        // TODO: This is crap.
         CModel modmod;
         var cntrls = new CControls { };
         var controls = cntrls.Controls;
@@ -62,10 +64,6 @@ public class MainScene: Scene {
         AddEntity(chopper);
 
     	base.Init();
-    }
-
-    public override void Cleanup(){
-        base.Cleanup();
     }
 }
 

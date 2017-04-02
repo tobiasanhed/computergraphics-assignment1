@@ -16,12 +16,17 @@ using Components;
 
 /// <summary>Represents a renderingsubsystem.</summary>
 public class LogicSubsystem: Subsystem {
+    /*--------------------------------------
+     * PUBLIC METHODS
+     *------------------------------------*/
+
+    /// <summary>Performs update logic specific to the subsystem.</summary>
+    /// <param name="t">The total game time, in seconds.</param>
+    /// <param name="dt">The elapsed time since last call, in seconds.</param>
     public override void Update(float t, float dt) {
         base.Update(t, dt);
 
-        var entities = Scene.GetEntities<CLogic>();
-
-        foreach (var entity in entities) {
+        foreach (var entity in Scene.GetEntities<CLogic>()) {
             var logic = entity.GetComponent<CLogic>();
 
             var timer = logic.UpdateTimer + dt;
