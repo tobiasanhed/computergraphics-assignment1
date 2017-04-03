@@ -33,7 +33,7 @@ public class ControlsSubsystem: Subsystem {
             // TODO: This is a hack lol.
             if (controls.Controls.ContainsKey("Up") && controls.Controls["Up"] != 0.0) {
                 var model = entity.GetComponent<CModel>();
-                model.Transform *= Matrix.CreateTranslation(0, 0, -dt*10);
+                model.Transform *= Matrix.CreateTranslation(0, 0, -dt*10*controls.Controls["Up"]);
 
             }
         }

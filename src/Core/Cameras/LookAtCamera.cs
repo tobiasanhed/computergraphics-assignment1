@@ -33,6 +33,7 @@ public class LookAtCamera : Camera {
         set {
             if (value is Vector3) {
                 m_Target = value;
+                return;
             }
 
             throw new ArgumentException("Unsupported target type");

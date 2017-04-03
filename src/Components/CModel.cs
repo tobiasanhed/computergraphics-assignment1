@@ -26,4 +26,14 @@ public class CModel: Component {
     public Matrix Transform { get; set; } = Matrix.Identity;
 }
 
+public class CHeightmap: Component {
+    public IndexBuffer IndexBuffer { get; set; }
+    public VertexBuffer VertexBuffer { get; set; }
+
+    public Matrix Transform { get; set; } = Matrix.Identity;
+
+    public int NumVertices { get; set; }
+    public int NumTriangles { get; set; }
+}
+
 }
