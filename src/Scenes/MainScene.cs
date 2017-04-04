@@ -83,7 +83,7 @@ public class MainScene: Scene {
     	base.Init();
     }
 
-    private VertexPositionColor CreateHeightmapVertex(Color[] pixels, int width, int height, int i, int j) {
+    private VertexPositionNormalTexture CreateHeightmapVertex(Color[] pixels, int width, int height, int i, int j) {
         var index = i + j*width;
         var color = pixels[index];
 
@@ -94,9 +94,8 @@ public class MainScene: Scene {
         //System.Console.WriteLine("{0}, {1} {2}", x, y, z);
 
         var ss = 9.0f;
-        return new VertexPositionColor {
+        return new VertexPositionNormalTexture {
             Position = new Vector3(ss*20.0f*x, ss*-4.0f*z, ss*20.0f*y),
-            Color = color
         };
     }
 
@@ -107,7 +106,7 @@ public class MainScene: Scene {
         heightmap.GetData<Color>(pixels);
 
         var indices = new List<int>();
-        var vertices = new List<VertexPositionColor>();
+        var vertices = new List<VertexPositionNormalTexture>();
 
         var k = (int)0;
         var q = 8;
@@ -122,21 +121,45 @@ public class MainScene: Scene {
                 vertices.Add(v0);
                 vertices.Add(v1);
                 vertices.Add(v2);
-                vertices.Add(v0);
-                vertices.Add(v2);
+                //vertices.Add(v0);
+                //vertices.Add(v2);
                 vertices.Add(v3);
 
-                indices.Add(k++);
-                indices.Add(k++);
-                indices.Add(k++);
-                indices.Add(k++);
-                indices.Add(k++);
-                indices.Add(k++);
+                int a = k++;
+                int b = k++;
+                int c = k++;
+                int d = k++;
+                indices.Add(a);
+                indices.Add(b);
+                indices.Add(c);
+                indices.Add(a);
+                indices.Add(c);
+                indices.Add(d);
             }
         }
 
-        VertexBuffer vb = new VertexBuffer(Game1.Inst.GraphicsDevice, typeof (VertexPositionColor), vertices.Count, BufferUsage.WriteOnly);
-        vb.SetData<VertexPositionColor>(vertices.ToArray());
+        for(int i = 0; i < indices.Count - 2; i += 3){
+            var a = indices[i];
+            var b = indices[i+1];
+            var c = indices[i+2];
+            var N = Vector3.Cross(vertices[b].Position - vertices[a].Position, vertices[c].Position - vertices[a].Position);
+
+            vertices[a]   = new VertexPositionNormalTexture { Position = vertices[a].Position, Normal = vertices[a].Normal + N };
+            vertices[b] = new VertexPositionNormalTexture { Position = vertices[b].Position, Normal = vertices[b].Normal + N };
+            vertices[c] = new VertexPositionNormalTexture { Position = vertices[c].Position, Normal = vertices[c].Normal + N };
+            //vertices[i + 1].Normal += N;
+            //vertices[i + 2].Normal += N;
+        }
+        
+        for(int i = 0; i < vertices.Count; i++) { 
+            var N = vertices[i].Normal;
+            if (N.Length () > 0.0)
+            N.Normalize();  
+            vertices[i] = new VertexPositionNormalTexture { Position = vertices[i].Position, Normal = N };
+        }
+
+        VertexBuffer vb = new VertexBuffer(Game1.Inst.GraphicsDevice, typeof (VertexPositionNormalTexture), vertices.Count, BufferUsage.WriteOnly);
+        vb.SetData<VertexPositionNormalTexture>(vertices.ToArray());
         IndexBuffer ib = new IndexBuffer(Game1.Inst.GraphicsDevice, typeof (int), indices.Count, BufferUsage.WriteOnly);
         ib.SetData(indices.ToArray());
 
