@@ -4,6 +4,8 @@ namespace CG_A1.Subsystems {
  * USINGS
  *------------------------------------*/
 
+using System;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -37,13 +39,14 @@ public class RenderingSubsystem: Subsystem {
 
         Game1.Inst.GraphicsDevice.Clear(Color.CornflowerBlue);
 
-
         foreach (var entity in Scene.GetEntities<CModel>()) {
             var model = entity.GetComponent<CModel>();
             var b = entity.GetComponent<CBody>();
-            var T = Matrix.CreateRotationX(0.0f) * Matrix.CreateTranslation(b.Position.X, b.Position.Y, b.Position.Z);
+            var he = (float)Math.Cos(t*1.0f*3.141592653)*0.045f;
+            var T = Matrix.CreateRotationY(-b.Heading-0.5f*3.141592653589f) * Matrix.CreateTranslation(b.Position.X, b.Position.Y+he, b.Position.Z);
+
             var m = model.Transform * T;
-            ((LookAtCamera)Camera).Target = new Vector3(m.M41, m.M42, m.M43);
+            ((LookAtCamera)Camera).Target = new Vector3(m.M41, m.M42*0.0f, m.M43);
 
 
             Matrix[] transforms = new Matrix[model.Model.Bones.Count];
@@ -85,7 +88,7 @@ public class RenderingSubsystem: Subsystem {
     public override void Init() {
         // Create a default camera.
         Camera = new LookAtCamera {
-            Position = new Vector3(-14, 12, 16)
+            Position = new Vector3(-24, 18, 16)
         };
     }
 }

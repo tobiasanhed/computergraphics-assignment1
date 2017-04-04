@@ -17,6 +17,7 @@ using Core;
 public class CBody: Component {
     public Vector3 Position;
     public Vector3 Velocity;
+    public float Heading;
 }
 
 /// <summary>Contains state information about a model.</summary>

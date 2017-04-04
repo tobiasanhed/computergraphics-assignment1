@@ -31,7 +31,7 @@ public class BodySubsystem: Subsystem {
             var body = entity.GetComponent<CBody>();
 
             // Apply linear drag.
-            body.Velocity -= 2.0f*dt*body.Velocity;
+            body.Velocity -= 1.0f*dt*body.Velocity;
             body.Position += dt*body.Velocity;
         }
     }

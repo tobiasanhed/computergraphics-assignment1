@@ -52,12 +52,20 @@ public class MainScene: Scene {
                 KeyMap = {
                     { Keys.Up, () => {
                           controls["Up"] = 1.0f;
-                    } }, { Keys.Down, () => {
+                      } },
+                    { Keys.Down, () => {
                           controls["Up"] = -1.0f;
-                    } }
+                      } },
+                    { Keys.Left, () => {
+                          controls["Turn"] = -1.0f;
+                      } },
+                    { Keys.Right, () => {
+                          controls["Turn"] = 1.0f;
+                      } }
                 },
                 ResetControls = () => {
                     controls["Up"] = 0.0f;
+                    controls["Turn"] = 0.0f;
                 }
             },
 
@@ -81,11 +89,11 @@ public class MainScene: Scene {
 
         var x = (float)i / (float)width  - 0.5f;
         var y = (float)j / (float)height - 0.5f;
-        var z = color.R / 255.0f         - 0.5f + 1.0f;
+        var z = color.R / 255.0f         - 0.5f + 0.7f;
 
         //System.Console.WriteLine("{0}, {1} {2}", x, y, z);
 
-        var ss = 3.0f;
+        var ss = 9.0f;
         return new VertexPositionColor {
             Position = new Vector3(ss*20.0f*x, ss*-4.0f*z, ss*20.0f*y),
             Color = color
@@ -98,11 +106,11 @@ public class MainScene: Scene {
         var pixels = new Color[heightmap.Width*heightmap.Height];
         heightmap.GetData<Color>(pixels);
 
-        var indices = new List<short>();
+        var indices = new List<int>();
         var vertices = new List<VertexPositionColor>();
 
-        var k = (short)0;
-        var q = 14;
+        var k = (int)0;
+        var q = 8;
         for (var j = 0; j < heightmap.Height-q; j += q) {
             for (var i = 0; i < heightmap.Width-q; i += q) {
                 // skapa triangel med index 0, 1, 2
@@ -129,7 +137,7 @@ public class MainScene: Scene {
 
         VertexBuffer vb = new VertexBuffer(Game1.Inst.GraphicsDevice, typeof (VertexPositionColor), vertices.Count, BufferUsage.WriteOnly);
         vb.SetData<VertexPositionColor>(vertices.ToArray());
-        IndexBuffer ib = new IndexBuffer(Game1.Inst.GraphicsDevice, typeof (short), indices.Count, BufferUsage.WriteOnly);
+        IndexBuffer ib = new IndexBuffer(Game1.Inst.GraphicsDevice, typeof (int), indices.Count, BufferUsage.WriteOnly);
         ib.SetData(indices.ToArray());
 
         heightmap.Dispose();
