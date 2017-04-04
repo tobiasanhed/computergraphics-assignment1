@@ -13,6 +13,12 @@ using Core;
  * CLASSES
  *------------------------------------*/
 
+// TODO: Move to own file
+public class CBody: Component {
+    public Vector3 Position;
+    public Vector3 Velocity;
+}
+
 /// <summary>Contains state information about a model.</summary>
 public class CModel: Component {
     /*--------------------------------------
@@ -26,6 +32,7 @@ public class CModel: Component {
     public Matrix Transform { get; set; } = Matrix.Identity;
 }
 
+// TODO: Move to own file.
 public class CHeightmap: Component {
     public IndexBuffer IndexBuffer { get; set; }
     public VertexBuffer VertexBuffer { get; set; }

@@ -26,7 +26,8 @@ public class MainScene: Scene {
 
     /// <summary>Performs initialization logic.</summary>
     public override void Init() {
-    	AddSubsystems(new  ControlsSubsystem(),
+    	AddSubsystems(new      BodySubsystem(),
+                      new  ControlsSubsystem(),
                       new     InputSubsystem(),
                       new     LogicSubsystem(),
                       new RenderingSubsystem());
@@ -40,6 +41,7 @@ public class MainScene: Scene {
         var cntrls = new CControls { };
         var controls = cntrls.Controls;
         chopper.AddComponents(
+            new CBody {},
             modmod = new CModel {
                 Model = model
             },
@@ -61,7 +63,8 @@ public class MainScene: Scene {
 
             new CLogic {
                 UpdateFunc = (t, dt) => {
-                    System.Console.WriteLine("LOL", t);
+                    // TODO: Spin propellah
+                    //System.Console.WriteLine("LOL", t);
                 }
             });
 
@@ -78,11 +81,11 @@ public class MainScene: Scene {
 
         var x = (float)i / (float)width  - 0.5f;
         var y = (float)j / (float)height - 0.5f;
-        var z = color.R / 255.0f         - 0.5f;
+        var z = color.R / 255.0f         - 0.5f + 1.0f;
 
         //System.Console.WriteLine("{0}, {1} {2}", x, y, z);
 
-        var ss = 1.0f;
+        var ss = 3.0f;
         return new VertexPositionColor {
             Position = new Vector3(ss*20.0f*x, ss*-4.0f*z, ss*20.0f*y),
             Color = color
@@ -90,7 +93,7 @@ public class MainScene: Scene {
     }
 
     private void LoadHeightmap() {
-        var heightmap = Game1.Inst.Content.Load<Texture2D>("Textures/paga2");
+        var heightmap = Game1.Inst.Content.Load<Texture2D>("Textures/US_Canyon");
 
         var pixels = new Color[heightmap.Width*heightmap.Height];
         heightmap.GetData<Color>(pixels);
@@ -99,7 +102,7 @@ public class MainScene: Scene {
         var vertices = new List<VertexPositionColor>();
 
         var k = (short)0;
-        var q = 10;
+        var q = 14;
         for (var j = 0; j < heightmap.Height-q; j += q) {
             for (var i = 0; i < heightmap.Width-q; i += q) {
                 // skapa triangel med index 0, 1, 2

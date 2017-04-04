@@ -16,7 +16,7 @@ using Components;
  *------------------------------------*/
 
 /// <summary>Provides a subsystem for responding to controls.</summary>
-public class ControlsSubsystem: Subsystem {
+public class BodySubsystem: Subsystem {
     /*--------------------------------------
      * PUBLIC METHODS
      *------------------------------------*/
@@ -27,16 +27,12 @@ public class ControlsSubsystem: Subsystem {
     public override void Update(float t, float dt) {
         base.Update(t, dt);
 
-        foreach (var entity in Scene.GetEntities<CControls>()) {
-            var controls = entity.GetComponent<CControls>();
+        foreach (var entity in Scene.GetEntities<CBody>()) {
+            var body = entity.GetComponent<CBody>();
 
-            // TODO: This is a hack lol.
-            if (controls.Controls.ContainsKey("Up") && controls.Controls["Up"] != 0.0) {
-                var body = entity.GetComponent<CBody>();
-                body.Velocity.X += 10.0f*dt * controls.Controls["Up"];
-                body.Velocity.Z += 10.0f*dt * controls.Controls["Up"];
-
-            }
+            // Apply linear drag.
+            body.Velocity -= 2.0f*dt*body.Velocity;
+            body.Position += dt*body.Velocity;
         }
     }
 }

@@ -54,6 +54,10 @@ public class Game1: Game {
 
         Inst     = this;
         Graphics = new GraphicsDeviceManager(this);
+
+        Graphics.PreparingDeviceSettings += (sender, e) => {
+            e.GraphicsDeviceInformation.GraphicsProfile = GraphicsProfile.HiDef;
+        };
     }
 
     /*--------------------------------------

@@ -40,7 +40,9 @@ public class RenderingSubsystem: Subsystem {
 
         foreach (var entity in Scene.GetEntities<CModel>()) {
             var model = entity.GetComponent<CModel>();
-            var m = model.Transform;
+            var b = entity.GetComponent<CBody>();
+            var T = Matrix.CreateRotationX(0.0f) * Matrix.CreateTranslation(b.Position.X, b.Position.Y, b.Position.Z);
+            var m = model.Transform * T;
             ((LookAtCamera)Camera).Target = new Vector3(m.M41, m.M42, m.M43);
 
 
@@ -50,7 +52,7 @@ public class RenderingSubsystem: Subsystem {
             foreach (var mesh in model.Model.Meshes) {
                 foreach (BasicEffect effect in mesh.Effects) {
                     effect.EnableDefaultLighting();
-                    effect.World = transforms[mesh.ParentBone.Index] * model.Transform;
+                    effect.World = transforms[mesh.ParentBone.Index] * m;
                     effect.View = Camera.ViewMatrix();
                     effect.Projection = Camera.Projection;
                 }
@@ -83,7 +85,7 @@ public class RenderingSubsystem: Subsystem {
     public override void Init() {
         // Create a default camera.
         Camera = new LookAtCamera {
-            Position = new Vector3(0, 12, 8)
+            Position = new Vector3(-14, 12, 16)
         };
     }
 }
