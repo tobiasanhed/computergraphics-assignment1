@@ -41,7 +41,7 @@ public class MainScene: Scene {
         var cntrls = new CControls { };
         var controls = cntrls.Controls;
         chopper.AddComponents(
-            new CBody {},
+            new CBody { Velocity = new Vector3(0f, 0f, 1.0f) },
             modmod = new CModel {
                 Model = model
             },
@@ -97,7 +97,8 @@ public class MainScene: Scene {
         return new VertexPositionNormalTexture {
             Position = new Vector3(ss*20.0f*x, ss*-4.0f*z, ss*20.0f*y),
             //Position = new Vector3(ss*20.0f*x, 100.0f*x*x, ss*20.0f*y),
-            Normal = Vector3.Zero
+            Normal = Vector3.Zero,
+            TextureCoordinate = new Vector2(i * 0.005f, j * 0.005f) // TODO: Det här är nog inte bästa lösningen, hehe
         };
     }
 

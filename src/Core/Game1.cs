@@ -114,8 +114,8 @@ public class Game1: Game {
         IsMouseVisible        = true;
         Window.Title          = "Computer Graphics - Assignment 1";
 
-        Graphics.PreferredBackBufferWidth = 1280;
-        Graphics.PreferredBackBufferHeight = 720;
+        Graphics.PreferredBackBufferWidth = 1920;
+        Graphics.PreferredBackBufferHeight = 1080;
         Graphics.ApplyChanges();
     }
 

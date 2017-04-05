@@ -32,6 +32,8 @@ public class RenderingSubsystem: Subsystem {
 
     private BasicEffect bEffect = new BasicEffect(Game1.Inst.GraphicsDevice);
     private float turnDelta;
+    private Texture2D groundTexture = Game1.Inst.Content.Load<Texture2D>("Textures/seamless-ice-texture");
+
     /// <summary>Performs draw logic specific to the subsystem.</summary>
     /// <param name="t">The total game time, in seconds.</param>
     /// <param name="dt">The elapsed time since last call, in seconds.</param>
@@ -96,6 +98,8 @@ public class RenderingSubsystem: Subsystem {
             bEffect.View = Camera.ViewMatrix();
             bEffect.Projection = Camera.Projection;
             bEffect.PreferPerPixelLighting = false;
+            bEffect.TextureEnabled = true;
+            bEffect.Texture = groundTexture;
 
             foreach (var pass in bEffect.CurrentTechnique.Passes) {
                 pass.Apply();
