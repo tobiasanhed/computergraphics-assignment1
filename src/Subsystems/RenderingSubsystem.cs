@@ -33,7 +33,7 @@ public class RenderingSubsystem: Subsystem {
     private BasicEffect bEffect = new BasicEffect(Game1.Inst.GraphicsDevice);
     private float turnDelta;
     private Texture2D groundTexture = Game1.Inst.Content.Load<Texture2D>("Textures/seamless-ice-texture");
-
+    private Texture2D pagaFaceTexture = Game1.Inst.Content.Load<Texture2D>("Textures/paga3");
     /// <summary>Performs draw logic specific to the subsystem.</summary>
     /// <param name="t">The total game time, in seconds.</param>
     /// <param name="dt">The elapsed time since last call, in seconds.</param>
@@ -68,13 +68,15 @@ public class RenderingSubsystem: Subsystem {
             Matrix[] transforms = new Matrix[model.Model.Bones.Count];
             model.Model.CopyAbsoluteBoneTransformsTo(transforms);
             var temp = transforms[3];
-            transforms[1] *= Matrix.CreateRotationY(t*10f);
+            transforms[1] *= Matrix.CreateRotationY(t*20f);
             transforms[3] *= Matrix.CreateTranslation(-transforms[3].M41, -transforms[3].M42, -transforms[3].M43);
-            transforms[3] *= Matrix.CreateRotationX(t*-10f);
+            transforms[3] *= Matrix.CreateRotationX(t*-20f);
             transforms[3] *= Matrix.CreateTranslation(temp.M41, temp.M42, temp.M43);
 
             foreach (var mesh in model.Model.Meshes) {
                 foreach (BasicEffect effect in mesh.Effects) {
+                    effect.TextureEnabled = true;
+                    effect.Texture = pagaFaceTexture;
                     effect.EnableDefaultLighting();
                     effect.World = transforms[mesh.ParentBone.Index] * m;
                     effect.View = Camera.ViewMatrix();

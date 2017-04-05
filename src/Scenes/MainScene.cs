@@ -103,7 +103,7 @@ public class MainScene: Scene {
     }
 
     private void LoadHeightmap() {
-        var heightmap = Game1.Inst.Content.Load<Texture2D>("Textures/paga2");
+        var heightmap = Game1.Inst.Content.Load<Texture2D>("Textures/US_Canyon");
 
         var pixels = new Color[heightmap.Width*heightmap.Height];
         heightmap.GetData<Color>(pixels);
