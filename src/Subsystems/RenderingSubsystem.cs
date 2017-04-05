@@ -96,6 +96,8 @@ public class RenderingSubsystem: Subsystem {
             bEffect.EnableDefaultLighting();
             bEffect.LightingEnabled = true;
             //bEffect.VertexColorEnabled = true;
+            //bEffect.DiffuseColor = Color.Cyan.ToVector3();
+
             bEffect.World = heightmap.Transform;
             bEffect.View = Camera.ViewMatrix();
             bEffect.Projection = Camera.Projection;
