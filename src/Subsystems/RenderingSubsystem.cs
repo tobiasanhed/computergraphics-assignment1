@@ -48,7 +48,7 @@ public class RenderingSubsystem: Subsystem {
             var b = entity.GetComponent<CBody>();
             var he1 = (float)Math.Cos(t*1.0f*3.141592653)*0.045f;
             var he2 = (float)Math.Cos(t*0.35f*3.141592653)*0.42f;
-            
+
             var tilt2 = Matrix.Identity;
             if(control.Controls.ContainsKey("Turn")){
                 turnDelta += (control.Controls["Turn"] - turnDelta) * dt;
@@ -77,6 +77,7 @@ public class RenderingSubsystem: Subsystem {
                 foreach (BasicEffect effect in mesh.Effects) {
                     effect.TextureEnabled = true;
                     effect.Texture = pagaFaceTexture;
+                    effect.EmissiveColor = Vector3.One * 0.5f; // Make face brighter :-)
                     effect.EnableDefaultLighting();
                     effect.World = transforms[mesh.ParentBone.Index] * m;
                     effect.View = Camera.ViewMatrix();
