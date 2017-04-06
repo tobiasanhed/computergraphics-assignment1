@@ -28,8 +28,7 @@ public class RenderingSubsystem: Subsystem {
 
     /*--------------------------------------
      * PUBLIC METHODS
-     *------------------------------------*/
-
+     *------------------------------------*/    
     private BasicEffect bEffect = new BasicEffect(Game1.Inst.GraphicsDevice);
     private float turnDelta;
     private Texture2D groundTexture = Game1.Inst.Content.Load<Texture2D>("Textures/seamless-ice-texture");
@@ -38,9 +37,17 @@ public class RenderingSubsystem: Subsystem {
     /// <param name="t">The total game time, in seconds.</param>
     /// <param name="dt">The elapsed time since last call, in seconds.</param>
     public override void Draw(float t, float dt) {
+        Game1.Inst.GraphicsDevice.Clear(Color.CornflowerBlue);
         base.Draw(t, dt);
 
-        Game1.Inst.GraphicsDevice.Clear(Color.CornflowerBlue);
+        SkyBox shit = new SkyBox(new Vector3(1000, 1000, 1000), new Vector3(0, -100, 0));
+        
+        bEffect.TextureEnabled = true;
+        bEffect.EnableDefaultLighting();
+        bEffect.VertexColorEnabled = false;
+        bEffect.LightingEnabled = true;
+		
+        shit.Draw(t, dt, bEffect);
 
         foreach (var entity in Scene.GetEntities<CModel>()) {
             var model = entity.GetComponent<CModel>();
@@ -59,7 +66,8 @@ public class RenderingSubsystem: Subsystem {
             var a = b.Velocity.Length() * 0.05f * 0.65f;
             var tilt = Matrix.CreateFromAxisAngle(r, a);
 
-            var T = tilt2 * Matrix.CreateRotationY(-b.Heading-0.5f*3.141592653589f) * tilt * Matrix.CreateTranslation(b.Position.X, b.Position.Y+he1+he2, b.Position.Z);
+            var T = tilt2 * Matrix.CreateRotationY(-b.Heading-0.5f*3.141592653589f) * tilt * 
+                Matrix.CreateTranslation(b.Position.X, b.Position.Y+he1+he2, b.Position.Z);
 
             var m = model.Transform * T;
             ((LookAtCamera)Camera).Target = new Vector3(m.M41, m.M42*0.0f, m.M43);
@@ -72,7 +80,7 @@ public class RenderingSubsystem: Subsystem {
             transforms[3] *= Matrix.CreateTranslation(-transforms[3].M41, -transforms[3].M42, -transforms[3].M43);
             transforms[3] *= Matrix.CreateRotationX(t*-20f);
             transforms[3] *= Matrix.CreateTranslation(temp.M41, temp.M42, temp.M43);
-
+            
             foreach (var mesh in model.Model.Meshes) {
                 foreach (BasicEffect effect in mesh.Effects) {
                     effect.TextureEnabled = true;
@@ -83,29 +91,29 @@ public class RenderingSubsystem: Subsystem {
                     effect.View = Camera.ViewMatrix();
                     effect.Projection = Camera.Projection;
                 }
-
+                
                 mesh.Draw();
             }
+
         }
 
         foreach (var entity in Scene.GetEntities<CHeightmap>()) {
             var heightmap = entity.GetComponent<CHeightmap>();
 
             Game1.Inst.GraphicsDevice.SetVertexBuffer(heightmap.VertexBuffer);
-            Game1.Inst.GraphicsDevice.Indices = heightmap.IndexBuffer;
+			Game1.Inst.GraphicsDevice.Indices = heightmap.IndexBuffer;
 
             bEffect.EnableDefaultLighting();
             bEffect.LightingEnabled = true;
-            //bEffect.VertexColorEnabled = true;
+            bEffect.VertexColorEnabled = false;
             //bEffect.DiffuseColor = Color.Cyan.ToVector3();
 
             bEffect.World = heightmap.Transform;
             bEffect.View = Camera.ViewMatrix();
             bEffect.Projection = Camera.Projection;
-            bEffect.PreferPerPixelLighting = false;
             bEffect.TextureEnabled = true;
             bEffect.Texture = groundTexture;
-
+            
             foreach (var pass in bEffect.CurrentTechnique.Passes) {
                 pass.Apply();
                 Game1.Inst.GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, heightmap.NumTriangles);
