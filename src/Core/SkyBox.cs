@@ -147,12 +147,18 @@
     }
     
     public void Draw(float t, float dt, BasicEffect bEffect){
+        // Stäng av z-axeln för en bättre effekt
         Game1.Inst.GraphicsDevice.DepthStencilState = new DepthStencilState { DepthBufferEnable = false };
         
         Game1.Inst.GraphicsDevice.SetVertexBuffer(vb);
         Game1.Inst.GraphicsDevice.Indices = ib;
 
         bEffect.World = bEffect.World * Matrix.CreateScale(scale) * Matrix.CreateTranslation(position);
+
+        bEffect.TextureEnabled = true;
+        bEffect.EnableDefaultLighting();
+        bEffect.VertexColorEnabled = false;
+        bEffect.LightingEnabled = true;
 
         bEffect.Texture = TEXTURE_1;
         foreach(EffectPass ep in bEffect.CurrentTechnique.Passes){

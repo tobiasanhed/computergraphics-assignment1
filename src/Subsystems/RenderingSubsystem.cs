@@ -33,21 +33,16 @@ public class RenderingSubsystem: Subsystem {
     private float turnDelta;
     private Texture2D groundTexture = Game1.Inst.Content.Load<Texture2D>("Textures/seamless-ice-texture");
     private Texture2D pagaFaceTexture = Game1.Inst.Content.Load<Texture2D>("Textures/paga3");
+    private SkyBox skyBox = new SkyBox(new Vector3(1000, 1000, 1000), new Vector3(0, -100, 0));
     /// <summary>Performs draw logic specific to the subsystem.</summary>
     /// <param name="t">The total game time, in seconds.</param>
     /// <param name="dt">The elapsed time since last call, in seconds.</param>
     public override void Draw(float t, float dt) {
         Game1.Inst.GraphicsDevice.Clear(Color.CornflowerBlue);
         base.Draw(t, dt);
-
-        SkyBox shit = new SkyBox(new Vector3(1000, 1000, 1000), new Vector3(0, -100, 0));
-        
-        bEffect.TextureEnabled = true;
-        bEffect.EnableDefaultLighting();
-        bEffect.VertexColorEnabled = false;
-        bEffect.LightingEnabled = true;
 		
-        shit.Draw(t, dt, bEffect);
+        // Ritar denna först pga att den stänger av z-axeln när den ritar.
+        skyBox.Draw(t, dt, bEffect);
 
         foreach (var entity in Scene.GetEntities<CModel>()) {
             var model = entity.GetComponent<CModel>();
