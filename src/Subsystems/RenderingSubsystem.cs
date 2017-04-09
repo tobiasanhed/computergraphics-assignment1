@@ -28,7 +28,7 @@ public class RenderingSubsystem: Subsystem {
 
     /*--------------------------------------
      * PUBLIC METHODS
-     *------------------------------------*/    
+     *------------------------------------*/
     private BasicEffect bEffect = new BasicEffect(Game1.Inst.GraphicsDevice);
     private float turnDelta;
     private Texture2D groundTexture = Game1.Inst.Content.Load<Texture2D>("Textures/seamless-ice-texture");
@@ -40,7 +40,7 @@ public class RenderingSubsystem: Subsystem {
     public override void Draw(float t, float dt) {
         Game1.Inst.GraphicsDevice.Clear(Color.CornflowerBlue);
         base.Draw(t, dt);
-		
+
         // Ritar denna först pga att den stänger av z-axeln när den ritar.
         skyBox.Draw(t, dt, bEffect);
 
@@ -61,9 +61,13 @@ public class RenderingSubsystem: Subsystem {
             var a = b.Velocity.Length() * 0.05f * 0.65f;
             var tilt = Matrix.CreateFromAxisAngle(r, a);
 
-            var T = tilt2 * Matrix.CreateRotationY(-b.Heading-0.5f*3.141592653589f) * tilt * 
-                Matrix.CreateTranslation(b.Position.X, b.Position.Y+he1+he2, b.Position.Z);
-
+            Matrix T;
+            if (r.Length() > 0.0001f) {
+                T = tilt2 * Matrix.CreateRotationY(-b.Heading-0.5f*3.141592653589f) * tilt * Matrix.CreateTranslation(b.Position.X, b.Position.Y+he1+he2, b.Position.Z);
+            }
+            else {
+                T = tilt2 * Matrix.CreateRotationY(-b.Heading-0.5f*3.141592653589f) * Matrix.CreateTranslation(b.Position.X, b.Position.Y+he1+he2, b.Position.Z);
+            }
             var m = model.Transform * T;
             ((LookAtCamera)Camera).Target = new Vector3(m.M41, m.M42*0.0f, m.M43);
 
@@ -75,7 +79,7 @@ public class RenderingSubsystem: Subsystem {
             transforms[3] *= Matrix.CreateTranslation(-transforms[3].M41, -transforms[3].M42, -transforms[3].M43);
             transforms[3] *= Matrix.CreateRotationX(t*-20f);
             transforms[3] *= Matrix.CreateTranslation(temp.M41, temp.M42, temp.M43);
-            
+
             foreach (var mesh in model.Model.Meshes) {
                 foreach (BasicEffect effect in mesh.Effects) {
                     effect.TextureEnabled = true;
@@ -86,7 +90,7 @@ public class RenderingSubsystem: Subsystem {
                     effect.View = Camera.ViewMatrix();
                     effect.Projection = Camera.Projection;
                 }
-                
+
                 mesh.Draw();
             }
 
@@ -108,7 +112,7 @@ public class RenderingSubsystem: Subsystem {
             bEffect.Projection = Camera.Projection;
             bEffect.TextureEnabled = true;
             bEffect.Texture = groundTexture;
-            
+
             foreach (var pass in bEffect.CurrentTechnique.Passes) {
                 pass.Apply();
                 Game1.Inst.GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, heightmap.NumTriangles);
