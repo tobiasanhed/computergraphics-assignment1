@@ -61,11 +61,18 @@ public class MainScene: Scene {
                       } },
                     { Keys.Right, () => {
                           controls["Turn"] = 1.0f;
+                      } },
+                    { Keys.Q, () => {
+                          controls["Pitch"] = -1.0f;
+                      } },
+                    { Keys.A, () => {
+                          controls["Pitch"] = 1.0f;
                       } }
                 },
                 ResetControls = () => {
                     controls["Up"] = 0.0f;
                     controls["Turn"] = 0.0f;
+                    controls["Pitch"] = 0.0f;
                 }
             },
 

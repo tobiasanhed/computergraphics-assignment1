@@ -32,6 +32,11 @@ public class ControlsSubsystem: Subsystem {
         foreach (var entity in Scene.GetEntities<CControls>()) {
             var controls = entity.GetComponent<CControls>();
 
+            if (controls.Controls.ContainsKey("Pitch") && controls.Controls["Pitch"] != 0) {
+                var body = entity.GetComponent<CBody>();
+                body.Pitch += 2.5f*dt*controls.Controls["Pitch"];
+            }
+
             if (controls.Controls.ContainsKey("Turn") && controls.Controls["Turn"] != 0) {
                 var body = entity.GetComponent<CBody>();
                 body.Heading += 2.5f*dt*controls.Controls["Turn"];

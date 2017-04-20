@@ -61,12 +61,16 @@ public class RenderingSubsystem: Subsystem {
             var a = b.Velocity.Length() * 0.05f * 0.65f;
             var tilt = Matrix.CreateFromAxisAngle(r, a);
 
+            var quat = Quaternion.CreateFromYawPitchRoll(-b.Heading-0.5f*3.141592653589f, b.Pitch, 0.0f);
+            var modelRot = Matrix.CreateFromQuaternion(quat);
+
+
             Matrix T;
             if (r.Length() > 0.0001f) {
-                T = tilt2 * Matrix.CreateRotationY(-b.Heading-0.5f*3.141592653589f) * tilt * Matrix.CreateTranslation(b.Position.X, b.Position.Y+he1+he2, b.Position.Z);
+                T = tilt2 * modelRot * tilt * Matrix.CreateTranslation(b.Position.X, b.Position.Y+he1+he2, b.Position.Z);
             }
             else {
-                T = tilt2 * Matrix.CreateRotationY(-b.Heading-0.5f*3.141592653589f) * Matrix.CreateTranslation(b.Position.X, b.Position.Y+he1+he2, b.Position.Z);
+                T = tilt2 * modelRot * Matrix.CreateTranslation(b.Position.X, b.Position.Y+he1+he2, b.Position.Z);
             }
             var m = model.Transform * T;
             ((LookAtCamera)Camera).Target = new Vector3(m.M41, m.M42*0.0f, m.M43);
