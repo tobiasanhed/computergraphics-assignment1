@@ -34,10 +34,13 @@ public class RenderingSubsystem: Subsystem {
     private Texture2D groundTexture = Game1.Inst.Content.Load<Texture2D>("Textures/seamless-ice-texture");
     private Texture2D pagaFaceTexture = Game1.Inst.Content.Load<Texture2D>("Textures/paga3");
     private SkyBox skyBox = new SkyBox(new Vector3(1000, 1000, 1000), new Vector3(0, -100, 0));
-    /// <summary>Performs draw logic specific to the subsystem.</summary>
-    /// <param name="t">The total game time, in seconds.</param>
-    /// <param name="dt">The elapsed time since last call, in seconds.</param>
-    public override void Draw(float t, float dt) {
+    private Effect shader;
+    private Vector3 viewVector;
+
+        /// <summary>Performs draw logic specific to the subsystem.</summary>
+        /// <param name="t">The total game time, in seconds.</param>
+        /// <param name="dt">The elapsed time since last call, in seconds.</param>
+        public override void Draw(float t, float dt) {
         Game1.Inst.GraphicsDevice.Clear(Color.CornflowerBlue);
         base.Draw(t, dt);
 
@@ -75,6 +78,8 @@ public class RenderingSubsystem: Subsystem {
             var m = model.Transform * T;
             ((LookAtCamera)Camera).Target = new Vector3(m.M41, m.M42*0.0f, m.M43);
 
+            viewVector = Vector3.Transform((Vector3)((LookAtCamera)Camera).Target - Camera.Position, Matrix.CreateRotationY(0));
+            viewVector.Normalize();
 
             Matrix[] transforms = new Matrix[model.Model.Bones.Count];
             model.Model.CopyAbsoluteBoneTransformsTo(transforms);
@@ -83,24 +88,49 @@ public class RenderingSubsystem: Subsystem {
             transforms[3] *= Matrix.CreateTranslation(-transforms[3].M41, -transforms[3].M42, -transforms[3].M43);
             transforms[3] *= Matrix.CreateRotationX(t*-20f);
             transforms[3] *= Matrix.CreateTranslation(temp.M41, temp.M42, temp.M43);
+                
+            foreach (ModelMesh mesh in model.Model.Meshes) {
+                foreach (ModelMeshPart part in mesh.MeshParts) {
+                    part.Effect = shader;
+                    Matrix worldInverseTransposeMatrix = Matrix.Transpose(Matrix.Invert(mesh.ParentBone.Transform * (transforms[mesh.ParentBone.Index] * m)));
+                    shader.Parameters["WorldInverseTranspose"].SetValue(worldInverseTransposeMatrix);
+                    shader.Parameters["World"].SetValue((transforms[mesh.ParentBone.Index] * m));
+                    shader.Parameters["View"].SetValue(Camera.ViewMatrix());
+                    shader.Parameters["Projection"].SetValue(Camera.Projection);
+                    shader.Parameters["AmbientColor"].SetValue(new Vector4(1f));
+                    shader.Parameters["AmbientIntensity"].SetValue(0.1f);
+                    shader.Parameters["DiffuseLightDirection"].SetValue(new Vector3(1f, 1f, 0));
+                    shader.Parameters["DiffuseColor"].SetValue(new Vector4(0, 1, 1, 1));
+                    shader.Parameters["DiffuseIntensity"].SetValue(1.0f);
 
-            foreach (var mesh in model.Model.Meshes) {
-                foreach (BasicEffect effect in mesh.Effects) {
-                    effect.TextureEnabled = true;
-                    effect.Texture = pagaFaceTexture;
-                    effect.EmissiveColor = Vector3.One * 0.5f; // Make face brighter :-)
-                    effect.EnableDefaultLighting();
-                    effect.World = transforms[mesh.ParentBone.Index] * m;
-                    effect.View = Camera.ViewMatrix();
-                    effect.Projection = Camera.Projection;
+                    shader.Parameters["ViewVector"].SetValue(viewVector);
+
+                    shader.Parameters["Shininess"].SetValue(200f);
+                    shader.Parameters["SpecularColor"].SetValue(new Vector4(1, 1, 1, 1));
+                    shader.Parameters["SpecularIntensity"].SetValue(1f);
+
+
+                    shader.Parameters["Transparency"].SetValue(0.5f);
                 }
+            mesh.Draw();
+            }
+                /*foreach (var mesh in model.Model.Meshes) {
+                    foreach (BasicEffect effect in mesh.Effects) {
+                        effect.TextureEnabled = true;
+                        effect.Texture = pagaFaceTexture;
+                        effect.EmissiveColor = Vector3.One * 0.5f; // Make face brighter :-)
+                        effect.EnableDefaultLighting();
+                        effect.World = transforms[mesh.ParentBone.Index] * m;
+                        effect.View = Camera.ViewMatrix();
+                        effect.Projection = Camera.Projection;
+                    }
 
-                mesh.Draw();
+                    mesh.Draw();
+                }*/
+
             }
 
-        }
-
-        foreach (var entity in Scene.GetEntities<CHeightmap>()) {
+            foreach (var entity in Scene.GetEntities<CHeightmap>()) {
             var heightmap = entity.GetComponent<CHeightmap>();
 
             Game1.Inst.GraphicsDevice.SetVertexBuffer(heightmap.VertexBuffer);
@@ -126,6 +156,8 @@ public class RenderingSubsystem: Subsystem {
 
     /// <summary>Performs initialization logic.</summary>
     public override void Init() {
+        shader = Game1.Inst.Content.Load<Effect>("Specular");
+            shader.CurrentTechnique = shader.Techniques["Specular"];
         // Create a default camera.
         Camera = new LookAtCamera {
             Position = new Vector3(-24, 18, 16)
