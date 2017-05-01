@@ -46,7 +46,28 @@ public class RenderingSubsystem: Subsystem {
 
         // Ritar denna först pga att den stänger av z-axeln när den ritar.
         skyBox.Draw(t, dt, bEffect);
+        foreach (var entity in Scene.GetEntities<CHeightmap>()) {
+            var heightmap = entity.GetComponent<CHeightmap>();
 
+            Game1.Inst.GraphicsDevice.SetVertexBuffer(heightmap.VertexBuffer);
+            Game1.Inst.GraphicsDevice.Indices = heightmap.IndexBuffer;
+
+            bEffect.EnableDefaultLighting();
+            bEffect.LightingEnabled = true;
+            bEffect.VertexColorEnabled = false;
+            //bEffect.DiffuseColor = Color.Cyan.ToVector3();
+
+            bEffect.World = heightmap.Transform;
+            bEffect.View = Camera.ViewMatrix();
+            bEffect.Projection = Camera.Projection;
+            bEffect.TextureEnabled = true;
+            bEffect.Texture = groundTexture;
+
+            foreach (var pass in bEffect.CurrentTechnique.Passes) {
+                pass.Apply();
+                Game1.Inst.GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, heightmap.NumTriangles);
+            }
+        }
         foreach (var entity in Scene.GetEntities<CModel>()) {
             var model = entity.GetComponent<CModel>();
             var control = entity.GetComponent<CControls>();
@@ -130,28 +151,7 @@ public class RenderingSubsystem: Subsystem {
 
             }
 
-            foreach (var entity in Scene.GetEntities<CHeightmap>()) {
-            var heightmap = entity.GetComponent<CHeightmap>();
-
-            Game1.Inst.GraphicsDevice.SetVertexBuffer(heightmap.VertexBuffer);
-			Game1.Inst.GraphicsDevice.Indices = heightmap.IndexBuffer;
-
-            bEffect.EnableDefaultLighting();
-            bEffect.LightingEnabled = true;
-            bEffect.VertexColorEnabled = false;
-            //bEffect.DiffuseColor = Color.Cyan.ToVector3();
-
-            bEffect.World = heightmap.Transform;
-            bEffect.View = Camera.ViewMatrix();
-            bEffect.Projection = Camera.Projection;
-            bEffect.TextureEnabled = true;
-            bEffect.Texture = groundTexture;
-
-            foreach (var pass in bEffect.CurrentTechnique.Passes) {
-                pass.Apply();
-                Game1.Inst.GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, heightmap.NumTriangles);
-            }
-        }
+            
     }
 
     /// <summary>Performs initialization logic.</summary>
